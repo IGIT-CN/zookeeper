@@ -154,6 +154,8 @@ public final class ServerMetrics {
         READS_ISSUED_IN_COMMIT_PROC = metricsContext.getSummary("read_commit_proc_issued", DetailLevel.BASIC);
         WRITES_ISSUED_IN_COMMIT_PROC = metricsContext.getSummary("write_commit_proc_issued", DetailLevel.BASIC);
 
+        THROTTLED_OPS = metricsContext.getCounter("throttled_ops");
+
         /**
          * Time spent by a read request in the commit processor.
          */
@@ -223,15 +225,19 @@ public final class ServerMetrics {
         STALE_REQUESTS = metricsContext.getCounter("stale_requests");
         STALE_REQUESTS_DROPPED = metricsContext.getCounter("stale_requests_dropped");
         STALE_REPLIES = metricsContext.getCounter("stale_replies");
+        REQUEST_THROTTLE_QUEUE_TIME = metricsContext.getSummary("request_throttle_queue_time_ms", DetailLevel.ADVANCED);
         REQUEST_THROTTLE_WAIT_COUNT = metricsContext.getCounter("request_throttle_wait_count");
         LARGE_REQUESTS_REJECTED = metricsContext.getCounter("large_requests_rejected");
 
         NETTY_QUEUED_BUFFER = metricsContext.getSummary("netty_queued_buffer_capacity", DetailLevel.BASIC);
 
         DIGEST_MISMATCHES_COUNT = metricsContext.getCounter("digest_mismatches_count");
+
         TLS_HANDSHAKE_EXCEEDED = metricsContext.getCounter("tls_handshake_exceeded");
 
         CNXN_CLOSED_WITHOUT_ZK_SERVER_RUNNING = metricsContext.getCounter("cnxn_closed_without_zk_server_running");
+
+        SOCKET_CLOSING_TIME = metricsContext.getSummary("socket_closing_time", DetailLevel.BASIC);
     }
 
     /**
@@ -381,6 +387,9 @@ public final class ServerMetrics {
     public final Summary READS_ISSUED_IN_COMMIT_PROC;
     public final Summary WRITES_ISSUED_IN_COMMIT_PROC;
 
+    // Request op throttling related
+    public final Counter THROTTLED_OPS;
+
     /**
      * Time spent by a read request in the commit processor.
      */
@@ -435,6 +444,7 @@ public final class ServerMetrics {
     public final Counter STALE_REQUESTS;
     public final Counter STALE_REQUESTS_DROPPED;
     public final Counter STALE_REPLIES;
+    public final Summary REQUEST_THROTTLE_QUEUE_TIME;
     public final Counter REQUEST_THROTTLE_WAIT_COUNT;
     public final Counter LARGE_REQUESTS_REJECTED;
 
@@ -447,6 +457,8 @@ public final class ServerMetrics {
     public final Counter TLS_HANDSHAKE_EXCEEDED;
 
     public final Counter CNXN_CLOSED_WITHOUT_ZK_SERVER_RUNNING;
+
+    public final Summary SOCKET_CLOSING_TIME;
 
     private final MetricsProvider metricsProvider;
 
